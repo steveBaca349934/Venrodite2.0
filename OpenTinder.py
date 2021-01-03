@@ -39,8 +39,9 @@ class OpenTinder(object):
 
         # hitting the facebook login button
         try:
-            driver.find_element_by_xpath(
-                "//span[contains(@class,'Pos(r) Z(1)') and contains(text(), 'Log in with Facebook')]").click()
+            element = driver.find_element_by_xpath("//span[contains(@class,'Pos(r) Z(1) D(ib)') and contains(text(), 'Log in with Facebook')]")
+            driver.execute_script("arguments[0].click();", element)
+
         except Exception:
             traceback.print_exc()
 
@@ -87,9 +88,6 @@ class OpenTinder(object):
 
         while(True):
             pass
-
-
-
 
 
 
