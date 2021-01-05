@@ -48,7 +48,13 @@ class CNN(object):
     @staticmethod
     def applyModel(image):
         model = CNN.loadImagesTrainModel()
+        img = image.load_img(imageLocation , target_size=(200, 200))
+        X = image.img_to_array(img)
 
+        #X = np.expand_dims(X, axis=0)
+        value = model.predict(X)
+        print("this is the expected value" + " " + value)
+        return value
 
 
 
