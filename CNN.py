@@ -9,10 +9,15 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.python.keras.optimizer_v2.rmsprop import RMSprop
 import numpy as np
 
-class CNN(object):
 
-    def __init__(self):
+class CNN(object):
+    int = 0
+    model = None
+
+    def __init__(self, model):
         print("initialized")
+        self.model = model
+        model = CNN.loadImagesTrainModel()
 
     @staticmethod
     def loadImagesTrainModel():
@@ -46,28 +51,25 @@ class CNN(object):
 
         model.fit(train_dataset, steps_per_epoch=3, epochs=10, validation_data=validation_dataset)
 
+        CNN.model = model
+
         return model
 
     @staticmethod
     def applyModel(imageLocation):
-        model = CNN.loadImagesTrainModel()
+        model = CNN.model
 
-        img = image.load_img(imageLocation , target_size=(200, 200, 3))
+        img = image.load_img(imageLocation, target_size=(200, 200, 3))
 
         X = image.img_to_array(img)
-        #have to add an extra dimension to the image to make it 4d
-        #this new dimension is just the number of images which in this case is just one
-        imageTest = np.expand_dims(X,0)
+        # have to add an extra dimension to the image to make it 4d
+        # this new dimension is just the number of images which in this case is just one
+        imageTest = np.expand_dims(X, 0)
         print(imageTest.shape)
-       # X = np.expand_dims(X, axis=0)
-       # images = np.vstack([X])
+        # X = np.expand_dims(X, axis=0)
+        # images = np.vstack([X])
         value = model.predict(imageTest)
         return value
 
 
 
-
-
-
-
-print(CNN.applyModel("/Users/stevebaca/Desktop/saved folder images tinderbot/skinny.jpg"))

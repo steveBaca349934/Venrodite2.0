@@ -13,7 +13,7 @@ import time
 import urllib.request
 from selenium.webdriver.common.keys import Keys
 
-import CNN
+from CNN import *
 
 
 class OpenTinder(object):
@@ -101,38 +101,47 @@ class OpenTinder(object):
 
         # implicitly wait 20 seconds
         driver.implicitly_wait(20)
+        #initialize and load Conv Net
+        CNN.loadImagesTrainModel()
 
-
-
-
+        counter = 0
         while True:
+            if counter ==0:
+
+                counter += 1
+
 
             element = driver.find_element_by_xpath("//div[@class = 'Bdrs(8px) Bgz(cv) Bgp(c) StretchedBox']")
             string = element.get_attribute("style")
             imageUrl = string.split("\"")
-            print(imageUrl[1])
             urllib.request.urlretrieve(imageUrl[1],"/Users/stevebaca/Desktop/saved folder images tinderbot/image.jpg")
-            #swipe left on the first person
+
+            # going every other person so you dont get shat on by the algorithm
             driver.find_element_by_id("Tinder").send_keys(Keys.ARROW_LEFT)
 
+
+
+            #TODO I need to have this loop check for popups that tinder sometimes comes up with
+
+
+            print(imageUrl[1])
+
             number = CNN.applyModel("/Users/stevebaca/Desktop/saved folder images tinderbot/image.jpg")
+            print("The number is " + " " + str(number))
             if number == 0:
                 driver.find_element_by_id("Tinder").send_keys(Keys.ARROW_LEFT)
             else:
                 driver.find_element_by_id("Tinder").send_keys(Keys.ARROW_RIGHT)
 
-
-
-
-
-
-
-            print("do you wish to continue?")
-            anotherInput = str(input())
-            if anotherInput == 'y':
+            try:
+                driver.find_element_by_xpath(
+                    "//span[contains(@class,'Pos(r) Z(1)') and contains(text(), 'Not interested')]").click()
+            except Exception:
+                print("did not show up luckily lol")
                 continue
-            else:
-                break
+
+
+
 
 
         while True:
